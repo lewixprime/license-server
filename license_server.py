@@ -162,9 +162,11 @@ def generate_license():
     
     # Определение срока действия
     duration_map = {
-        'trial': 7,
+        'trial_1day': 1,
+        'trial_3days': 3,
         'weekly': 7,
         'monthly': 30,
+        'yearly': 365,
         'lifetime': None
     }
     
