@@ -153,7 +153,7 @@ def license_info():
     })
 
 # Админ пароль (ИЗМЕНИ ЭТО!)
-ADMIN_PASSWORD = "your_super_secret_password_12345"
+ADMIN_PASSWORD = "9724776_rD"
 
 def check_admin_auth():
     """Проверка авторизации админа"""
