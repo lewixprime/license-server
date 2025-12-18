@@ -152,10 +152,23 @@ def license_info():
         "blocked": bool(blocked)
     })
 
+# Админ пароль (ИЗМЕНИ ЭТО!)
+ADMIN_PASSWORD = "your_super_secret_password_12345"
+
+def check_admin_auth():
+    """Проверка авторизации админа"""
+    auth = request.headers.get('Authorization')
+    if not auth or auth != f"Bearer {ADMIN_PASSWORD}":
+        return False
+    return True
+
 # Админ функции
 @app.route('/admin/generate', methods=['POST'])
 def generate_license():
-    """Генерация новой лицензии (защити это паролем!)"""
+    """Генерация новой лицензии"""
+    if not check_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+    
     data = request.json
     license_type = data.get('type', 'monthly')  # trial, weekly, monthly, lifetime
     count = data.get('count', 1)
@@ -194,6 +207,9 @@ def generate_license():
 @app.route('/admin/block', methods=['POST'])
 def block_license():
     """Блокировка лицензии"""
+    if not check_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+    
     data = request.json
     license_key = data.get('key')
     
@@ -208,6 +224,9 @@ def block_license():
 @app.route('/admin/list', methods=['GET'])
 def list_licenses():
     """Список всех лицензий"""
+    if not check_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+    
     conn = sqlite3.connect('licenses.db')
     c = conn.cursor()
     c.execute("SELECT * FROM licenses ORDER BY created_at DESC")
