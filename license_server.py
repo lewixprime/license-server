@@ -82,9 +82,10 @@ init_db()
 # ==================== УТИЛИТЫ ====================
 
 def generate_license_key(prefix: str = "") -> str:
-    """Генерация уникального ключа"""
-    random_part = secrets.token_hex(12).upper()
-    key = f"{random_part[:4]}-{random_part[4:8]}-{random_part[8:12]}-{random_part[12:16]}-{random_part[16:20]}-{random_part[20:]}"
+    """Генерация уникального ключа с префиксом RBXMT"""
+    random_part = secrets.token_hex(10).upper()
+    # Формат: RBXMT-XXXX-XXXX-XXXX-XXXX
+    key = f"{random_part[:4]}-{random_part[4:8]}-{random_part[8:12]}-{random_part[12:16]}-{random_part[16:]}"
     if prefix:
         key = f"{prefix}-{key}"
     return key
@@ -300,17 +301,17 @@ def generate_license():
     """Генерация новых лицензий"""
     data = request.json or {}
     license_type = data.get('type', 'monthly')
-    count = min(data.get('count', 1), 100)  # Максимум 100 за раз
+    count = min(data.get('count', 1), 100)
     notes = data.get('notes', '')
     
-    # Префиксы для типов
+    # Префиксы для типов - все начинаются с RBXMT
     prefix_map = {
-        'trial_1day': 'T1D',
-        'trial_3days': 'T3D',
-        'weekly': 'WKY',
-        'monthly': 'MTH',
-        'yearly': 'YRL',
-        'lifetime': 'LTM'
+        'trial_1day': 'RBXMT-T1D',
+        'trial_3days': 'RBXMT-T3D',
+        'weekly': 'RBXMT-WKY',
+        'monthly': 'RBXMT-MTH',
+        'yearly': 'RBXMT-YRL',
+        'lifetime': 'RBXMT-LTM'
     }
     
     # Сроки действия
@@ -324,7 +325,7 @@ def generate_license():
     }
     
     days = duration_map.get(license_type)
-    prefix = prefix_map.get(license_type, '')
+    prefix = prefix_map.get(license_type, 'RBXMT')
     
     conn = get_db()
     c = conn.cursor()
