@@ -1,62 +1,51 @@
+# Базы данных
+*.db
+*.sqlite
+*.sqlite3
+licenses.db
+
+# Логи
+*.log
+bot.log
+
+# Файлы с данными
+proxies.txt
+emails.txt
+accounts.txt
+registered_*.txt
+refreshed_*.txt
+checked_*.txt
+logs_*.txt
+logs_*.json
+logs_*.csv
+
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Virtual Environment
+env/
 venv/
 ENV/
-env/
-
-# Environment variables
-.env
-.env.local
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Logs
-*.log
-logs/
+build/
+dist/
+*.egg-info/
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Backups
-backups/
-*.backup
-
-# License files
+# Секретные файлы
+.env
+config_local.json
 license.dat
-.license.key
 
-# Secrets
-secrets.py
-obfuscated_secrets.py
+# Windows
+Thumbs.db
+desktop.ini
+
+# Mac
+.DS_Store
