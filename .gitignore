@@ -1,4 +1,51 @@
-.env
+# Базы данных
+*.db
+*.sqlite
+*.sqlite3
+licenses.db
+
+# Логи
+*.log
+bot.log
+
+# Файлы с данными
+proxies.txt
+emails.txt
+accounts.txt
+registered_*.txt
+refreshed_*.txt
+checked_*.txt
+logs_*.txt
+logs_*.json
+logs_*.csv
+
+# Python
 __pycache__/
-*.pyc
-.venv/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Секретные файлы
+.env
+config_local.json
+license.dat
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Mac
+.DS_Store
