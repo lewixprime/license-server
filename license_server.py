@@ -761,6 +761,96 @@ def health_check():
         }), 500
 
 
+@app.route('/api/version', methods=['GET'])
+def get_version():
+    """Получить информацию о последней версии приложения"""
+    return jsonify({
+        "version": "1.1.0",
+        "download_url": "https://github.com/yourusername/rbxmt/releases/download/v1.1.0/RBXMT_v1.1.0.exe",
+        "changelog": [
+            "✨ Добавлена система автообновлений",
+            "🔒 Улучшенная система HWID",
+            "🔐 Шифрование файла лицензии",
+            "📊 Расширенная аналитика в админке",
+            "📁 Drag & Drop для файлов",
+            "💾 Система резервного копирования",
+            "📝 Продвинутое логирование",
+            "🐛 Исправлены мелкие баги"
+        ],
+        "required": False,  # Обязательное обновление?
+        "size_mb": 15.3,
+        "release_date": "2025-12-19",
+        "min_version": "1.0.0"  # Минимальная поддерживаемая версия
+    })
+
+
+@app.route('/admin/analytics/activations', methods=['GET'])
+@admin_required
+def get_activations_chart():
+    """График активаций за последние 30 дней"""
+    conn = get_db()
+    c = conn.cursor()
+    
+    c.execute("""
+        SELECT DATE(activation_date) as date, COUNT(*) as count
+        FROM licenses
+        WHERE activation_date IS NOT NULL 
+        AND activation_date >= date('now', '-30 days')
+        GROUP BY DATE(activation_date)
+        ORDER BY date
+    """)
+    
+    data = [{'date': row[0], 'count': row[1]} for row in c.fetchall()]
+    conn.close()
+    
+    return jsonify({'data': data})
+
+
+@app.route('/admin/analytics/revenue', methods=['GET'])
+@admin_required
+def get_revenue_stats():
+    """Статистика доходов"""
+    conn = get_db()
+    c = conn.cursor()
+    
+    # Цены по типам лицензий
+    prices = {
+        'trial_1day': 2,
+        'trial_3days': 5,
+        'weekly': 10,
+        'monthly': 25,
+        'yearly': 200,
+        'lifetime': 500
+    }
+    
+    c.execute("""
+        SELECT type, COUNT(*) as count
+        FROM licenses
+        WHERE activated = 1
+        GROUP BY type
+    """)
+    
+    revenue = {}
+    total = 0
+    for row in c.fetchall():
+        license_type, count = row
+        price = prices.get(license_type, 0)
+        revenue[license_type] = {
+            'count': count,
+            'revenue': count * price,
+            'price': price
+        }
+        total += count * price
+    
+    conn.close()
+    
+    return jsonify({
+        'by_type': revenue,
+        'total': total,
+        'currency': 'USD'
+    })
+
+
 @app.route('/', methods=['GET'])
 def index():
     """Главная страница"""
@@ -769,8 +859,8 @@ def index():
         "version": "2.0",
         "status": "running",
         "endpoints": {
-            "client": ["/api/activate", "/api/verify", "/api/info"],
-            "admin": ["/admin/generate", "/admin/list", "/admin/stats", "/admin/block", "/admin/unblock", "/admin/reset-hwid", "/admin/extend", "/admin/delete", "/admin/search", "/admin/logs", "/admin/export"],
+            "client": ["/api/activate", "/api/verify", "/api/info", "/api/version"],
+            "admin": ["/admin/generate", "/admin/list", "/admin/stats", "/admin/block", "/admin/unblock", "/admin/reset-hwid", "/admin/extend", "/admin/delete", "/admin/search", "/admin/logs", "/admin/export", "/admin/analytics/activations", "/admin/analytics/revenue"],
             "health": ["/health"]
         }
     })
