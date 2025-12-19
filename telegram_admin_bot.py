@@ -16,8 +16,8 @@ app = Flask(__name__)
 
 # ==================== КОНФИГУРАЦИЯ ====================
 
-ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', '9724776_rD')
-DATABASE_PATH = os.getenv('DATABASE_PATH', 'licenses.db')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', '')
+DATABASE_PATH = os.getenv('DATABASE_PATH', '')
 RATE_LIMIT_REQUESTS = 10  # Максимум запросов
 RATE_LIMIT_WINDOW = 60    # За 60 секунд
 
