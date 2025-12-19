@@ -11,14 +11,13 @@ import hashlib
 import logging
 from collections import defaultdict
 import time
+import base64
 
 app = Flask(__name__)
 
-# ==================== КОНФИГУРАЦИЯ ====================
-
-ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', '9724776_rD')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', '')
 DATABASE_PATH = os.getenv('DATABASE_PATH', 'licenses.db')
-RATE_LIMIT_REQUESTS = 10  # Максимум запросов
+RATE_LIMIT_REQUESTS = 30  # Максимум запросов (увеличено)
 RATE_LIMIT_WINDOW = 60    # За 60 секунд
 
 # Логирование
